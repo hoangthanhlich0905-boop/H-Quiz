@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hệ Thống Quiz V7 - Ultimate Perfect UI</title>
+    <title>Hệ Thống Quiz V7 - Ultimate Settings</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -26,14 +26,29 @@
             --success: #34a853; --success-bg: #e6f4ea; --danger: #ea4335; --danger-bg: #fce8e6;
             --warning: #fbbc05;
             --font-main: 'Roboto', sans-serif;
+            
+            /* Biến kích thước (Mặc định - Vừa) */
+            --fs-main: 15px;
+            --fs-title: 15.5px;
+            --fs-btn: 14px;
+            --pad-card: 20px;
+            --pad-opt: 10px 12px;
         }
+
+        /* 6 MỨC KÍCH THƯỚC GIAO DIỆN */
+        body.ui-xs { --fs-main: 11px; --fs-title: 11.5px; --fs-btn: 10px; --pad-card: 10px; --pad-opt: 5px 6px; } /* Siêu nhỏ */
+        body.ui-sm { --fs-main: 12px; --fs-title: 12.5px; --fs-btn: 11px; --pad-card: 12px; --pad-opt: 6px 8px; } /* Nhỏ */
+        body.ui-ms { --fs-main: 13px; --fs-title: 13.5px; --fs-btn: 12px; --pad-card: 15px; --pad-opt: 8px 10px; } /* Nhỏ vừa */
+        /* Mặc định là md (Vừa) sử dụng :root */
+        body.ui-lg { --fs-main: 17px; --fs-title: 17.5px; --fs-btn: 16px; --pad-card: 25px; --pad-opt: 12px 14px; } /* Lớn */
+        body.ui-xl { --fs-main: 19px; --fs-title: 19.5px; --fs-btn: 18px; --pad-card: 30px; --pad-opt: 14px 16px; } /* Rất lớn */
 
         body.dark-mode {
             --bg-body: #18191a; --bg-card: #242526; --text-main: #e4e6eb; --text-muted: #b0b3b8;
             --border: #3a3b3c; --primary: #2d88ff; --success-bg: rgba(52, 168, 83, 0.15); --danger-bg: rgba(234, 67, 53, 0.15);
         }
 
-        body { font-family: var(--font-main); background-color: var(--bg-body); color: var(--text-main); margin: 0; padding: 15px; font-weight: 300; line-height: 1.5; transition: background 0.3s; font-size: 15px; }
+        body { font-family: var(--font-main); background-color: var(--bg-body); color: var(--text-main); margin: 0; padding: 15px; font-weight: 300; line-height: 1.5; transition: background 0.3s; font-size: var(--fs-main); }
         b, strong, th { font-weight: 700; color: #000; }
         body.dark-mode b, body.dark-mode strong, body.dark-mode th { color: #fff; }
         .container { max-width: 900px; margin: auto; }
@@ -44,9 +59,9 @@
         
         code { font-family: Consolas, monospace; background: rgba(128,128,128,0.2); padding: 2px 4px; border-radius: 4px; color: var(--primary); font-size: 0.95em; font-weight: 700;}
         pre code { background: transparent; padding: 0; font-weight: normal; color: inherit;}
-        pre[class*="language-"] { margin: 10px 0; padding: 12px; border-radius: 8px; font-size: 13.5px; line-height: 1.4; overflow-x: auto; }
+        pre[class*="language-"] { margin: 10px 0; padding: 12px; border-radius: 8px; font-size: calc(var(--fs-main) - 1.5px); line-height: 1.4; overflow-x: auto; }
 
-        button { padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer; color: white; background-color: var(--primary); font-weight: 700; font-size: 14px; margin: 4px; transition: 0.2s; }
+        button { padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer; color: white; background-color: var(--primary); font-weight: 700; font-size: var(--fs-btn); margin: 4px; transition: 0.2s; }
         button:hover { filter: brightness(0.9); }
         button:disabled { opacity: 0.5; cursor: not-allowed; }
         button.success { background-color: var(--success); }
@@ -54,11 +69,11 @@
         button.warning { background-color: var(--warning); color: #000; }
         button.outline { background-color: transparent; border: 1px solid var(--border); color: var(--text-main); }
         
-        input[type="text"], select, textarea { padding: 10px; width: 100%; box-sizing: border-box; border: 1px solid var(--border); border-radius: 6px; background: var(--bg-card); color: var(--text-main); font-size: 14px; font-weight: 400; font-family: var(--font-main);}
+        input[type="text"], select, textarea { padding: 10px; width: 100%; box-sizing: border-box; border: 1px solid var(--border); border-radius: 6px; background: var(--bg-card); color: var(--text-main); font-size: var(--fs-btn); font-weight: 400; font-family: var(--font-main);}
         textarea { resize: vertical; min-height: 80px; }
         select { width: auto; display: inline-block; }
         
-        .card { background: var(--bg-card); padding: 20px; border-radius: 12px; box-shadow: 0 1px 5px rgba(0,0,0,0.05); margin-bottom: 20px; border: 1px solid var(--border); position: relative;}
+        .card { background: var(--bg-card); padding: var(--pad-card); border-radius: 12px; box-shadow: 0 1px 5px rgba(0,0,0,0.05); margin-bottom: 20px; border: 1px solid var(--border); position: relative;}
         .elevated-card { z-index: 100 !important; position: relative; }
         
         .quiz-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; margin-top: 20px; }
@@ -76,13 +91,13 @@
         .dropdown-content button.danger-text { color: var(--danger); }
         .show-menu { display: block; }
 
-        .text-block-nl { background-color: rgba(0,0,0,0.03); padding: 12px 15px; margin: 10px 0; border-radius: 8px; font-size: 13.5px; border-left: 3px solid var(--text-muted); white-space: pre-line; line-height: 1.6;}
+        .text-block-nl { background-color: rgba(0,0,0,0.03); padding: 12px 15px; margin: 10px 0; border-radius: 8px; font-size: calc(var(--fs-main) - 1.5px); border-left: 3px solid var(--text-muted); white-space: pre-line; line-height: 1.6;}
         body.dark-mode .text-block-nl { background-color: rgba(255,255,255,0.06); }
 
-        .question-title { margin-top: 0; margin-bottom: 12px; font-size: 15.5px; font-weight: 400; line-height: 1.6; white-space: pre-line;}
+        .question-title { margin-top: 0; margin-bottom: 12px; font-size: var(--fs-title); font-weight: 400; line-height: 1.6; white-space: pre-line;}
         .question-title strong { font-weight: 700; }
 
-        .option-label { display: block; margin: 8px 0; cursor: pointer; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-body); transition: 0.2s; font-weight: 400; font-size: 15px;}
+        .option-label { display: block; margin: 8px 0; cursor: pointer; padding: var(--pad-opt); border-radius: 8px; border: 1px solid var(--border); background: var(--bg-body); transition: 0.2s; font-weight: 400; font-size: var(--fs-main);}
         .option-label:hover { border-color: var(--primary); }
         .option-label input { margin-right: 8px; transform: scale(1.1); }
         
@@ -93,14 +108,14 @@
         .mtf-option-label { display: flex; align-items: center; justify-content: center; flex: 1; padding: 8px 10px; border: 1px solid var(--border); border-radius: 6px; cursor: pointer; background: var(--bg-body); transition: 0.2s; font-weight: 500; }
         .mtf-option-label:hover { border-color: var(--primary); }
         .mtf-option-label input { margin-right: 6px; transform: scale(1.2); }
-        .mtf-feedback { margin-top: 8px; padding: 8px 12px; border-radius: 6px; font-size: 14px; }
+        .mtf-feedback { margin-top: 8px; padding: 8px 12px; border-radius: 6px; font-size: calc(var(--fs-main) - 1px); }
         
         .is-correct, .mtf-row-correct { background-color: var(--success-bg) !important; border-color: var(--success) !important; }
         .is-incorrect, .mtf-row-wrong { background-color: var(--danger-bg) !important; border-color: var(--danger) !important; }
         .card-correct { border-left: 5px solid var(--success); }
         .card-wrong { border-left: 5px solid var(--danger); }
         
-        .feedback-box { margin-top: 12px; padding: 12px; border-radius: 8px; font-size: 14.5px; display: none; background: var(--bg-body); border-left: 4px solid var(--text-muted); }
+        .feedback-box { margin-top: 12px; padding: 12px; border-radius: 8px; font-size: calc(var(--fs-main) - 0.5px); display: none; background: var(--bg-body); border-left: 4px solid var(--text-muted); }
         .hidden { display: none !important; }
         
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
@@ -112,15 +127,13 @@
         .quiz-wrapper { display: flex; gap: 20px; align-items: flex-start; position: relative;}
         .quiz-main { flex: 1; min-width: 0; }
         
-        /* SIDEBAR LIST */
+        /* CỐ ĐỊNH SIDEBAR LIST (Không dùng CSS Variables để tránh bị thu phóng) */
         .quiz-sidebar { width: 140px; position: sticky; top: 80px; max-height: calc(100vh - 100px); background: var(--bg-card); padding: 15px 10px; border-radius: 12px; border: 1px solid var(--border); display: flex; flex-direction: column; box-shadow: 0 2px 10px rgba(0,0,0,0.05);}
-        .sidebar-header { font-weight: 700; text-align: center; border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 10px; font-size: 14px;}
+        .sidebar-header { font-weight: 700; text-align: center; border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 10px; font-size: 14px;} 
         
-        /* ẨN THANH CUỘN MẶC ĐỊNH (Scrollbar) */
         .sidebar-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(35px, 1fr)); gap: 8px; overflow-y: auto; padding-right: 0; flex: 1; align-content: start; -ms-overflow-style: none; scrollbar-width: none; }
-        .sidebar-grid::-webkit-scrollbar { display: none; } /* Xóa lẹm thanh cuộn */
+        .sidebar-grid::-webkit-scrollbar { display: none; } 
         
-        /* KHÓA CỨNG FLEXBOX ĐỂ SỐ LUÔN Ở GIỮA Ô VUÔNG */
         .nav-bubble { width: 35px; height: 35px; border-radius: 4px; box-sizing: border-box; display: flex !important; align-items: center !important; justify-content: center !important; font-size: 12px; font-weight: bold; cursor: pointer; border: 1px solid var(--border); background: var(--bg-body); color: var(--text-main); transition: 0.2s; line-height: 1;}
         .nav-bubble:hover { border-color: var(--primary); }
         .nav-bubble.active-view { box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.4); border-color: var(--primary); color: var(--primary); background: transparent; transform: scale(1.1);}
@@ -143,10 +156,10 @@
 
             .quiz-wrapper { gap: 10px; }
             .quiz-sidebar { 
-                width: 38px; /* Mở rộng xíu để số không chạm viền */
-                padding: 10px 4px 15px 4px; /* Chừa khoảng không bên dưới để bo góc */
+                width: 38px; 
+                padding: 10px 4px 15px 4px; 
                 max-height: calc(100vh - 120px); 
-                margin-bottom: 15px; /* Nâng đáy lên khỏi màn hình */
+                margin-bottom: 15px; 
                 border-radius: 12px !important; 
             } 
             .sidebar-header { display: none; } 
@@ -154,7 +167,7 @@
                 grid-template-columns: 1fr; 
                 padding-right: 0; 
                 gap: 6px;
-                padding-bottom: 10px; /* Cho vùng cuộn thoáng ở đáy */
+                padding-bottom: 10px; 
             } 
             .nav-bubble { 
                 width: 28px; 
@@ -170,7 +183,8 @@
 <div class="container" id="app">
     <div class="header">
         <h2 style="margin:0; font-weight: 700; font-size: 20px;">📝 Hệ Thống Thi Trắc Nghiệm</h2>
-        <button class="outline" onclick="toggleDarkMode()">🌓 Giao diện</button>
+        <!-- NÚT BÁNH RĂNG CÀI ĐẶT -->
+        <button class="outline" style="font-size: 22px; padding: 4px 10px;" onclick="openGlobalSettings()">⚙️</button>
     </div>
 
     <!-- VIEW 1: TRANG CHỦ -->
@@ -207,6 +221,31 @@
         </div>
     </div>
 
+    <!-- MODAL CÀI ĐẶT HỆ THỐNG GIAO DIỆN (ĐÃ UPDATE 6 MỨC) -->
+    <div id="modal-global-settings" class="modal">
+        <div class="modal-content">
+            <h3 style="margin-top:0; border-bottom: 1px solid var(--border); padding-bottom: 10px;">⚙️ Cài đặt hệ thống</h3>
+            
+            <div style="margin-bottom: 20px;">
+                <b>Giao diện:</b><br>
+                <label style="display:inline-block; margin-top:10px; cursor:pointer;"><input type="radio" name="theme-setting" value="light" onchange="setTheme('light')"> ☀️ Sáng</label> &nbsp;&nbsp;&nbsp;
+                <label style="display:inline-block; margin-top:10px; cursor:pointer;"><input type="radio" name="theme-setting" value="dark" onchange="setTheme('dark')"> 🌙 Tối</label>
+            </div>
+            
+            <div style="margin-bottom: 25px;">
+                <b>Kích thước hiển thị:</b><br>
+                <label style="display:block; margin-top:12px; cursor:pointer;"><input type="radio" name="ui-setting" value="ui-xs" onchange="setUISize('ui-xs')"> 🐜 Siêu nhỏ</label>
+                <label style="display:block; margin-top:12px; cursor:pointer;"><input type="radio" name="ui-setting" value="ui-sm" onchange="setUISize('ui-sm')"> 🔬 Nhỏ</label>
+                <label style="display:block; margin-top:12px; cursor:pointer;"><input type="radio" name="ui-setting" value="ui-ms" onchange="setUISize('ui-ms')"> 🔍 Nhỏ vừa</label>
+                <label style="display:block; margin-top:12px; cursor:pointer;"><input type="radio" name="ui-setting" value="ui-md" onchange="setUISize('ui-md')"> 📏 Vừa (Mặc định)</label>
+                <label style="display:block; margin-top:12px; cursor:pointer;"><input type="radio" name="ui-setting" value="ui-lg" onchange="setUISize('ui-lg')"> 🔎 Lớn</label>
+                <label style="display:block; margin-top:12px; cursor:pointer;"><input type="radio" name="ui-setting" value="ui-xl" onchange="setUISize('ui-xl')"> 🐘 Rất lớn</label>
+            </div>
+
+            <button class="outline" style="width:100%;" onclick="closeModals()">Đóng</button>
+        </div>
+    </div>
+
     <!-- MODAL RESUME -->
     <div id="modal-resume" class="modal">
         <div class="modal-content">
@@ -218,7 +257,7 @@
         </div>
     </div>
 
-    <!-- MODAL SETTING -->
+    <!-- MODAL SETTING BÀI THI -->
     <div id="modal-settings" class="modal">
         <div class="modal-content">
             <h3 style="margin-top:0;" id="setting-title">⚙️ Tùy chọn bài thi</h3>
@@ -286,10 +325,43 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
 
 <script>
-    if(localStorage.getItem('dark-mode') === 'true') document.body.classList.add('dark-mode');
-    function toggleDarkMode() {
-        document.body.classList.toggle('dark-mode');
-        localStorage.setItem('dark-mode', document.body.classList.contains('dark-mode'));
+    // KHỞI TẠO CÀI ĐẶT GIAO DIỆN TỪ LOCALSTORAGE
+    let savedDarkMode = localStorage.getItem('dark-mode') === 'true';
+    if(savedDarkMode) document.body.classList.add('dark-mode');
+    
+    let savedUISize = localStorage.getItem('ui-size') || 'ui-md';
+    if(savedUISize !== 'ui-md') document.body.classList.add(savedUISize);
+
+    function openGlobalSettings() {
+        // Cập nhật trạng thái check hiện tại
+        let isDark = document.body.classList.contains('dark-mode');
+        document.querySelector(`input[name="theme-setting"][value="${isDark ? 'dark' : 'light'}"]`).checked = true;
+        
+        let currentSize = 'ui-md';
+        if(document.body.classList.contains('ui-xs')) currentSize = 'ui-xs';
+        if(document.body.classList.contains('ui-sm')) currentSize = 'ui-sm';
+        if(document.body.classList.contains('ui-ms')) currentSize = 'ui-ms';
+        if(document.body.classList.contains('ui-lg')) currentSize = 'ui-lg';
+        if(document.body.classList.contains('ui-xl')) currentSize = 'ui-xl';
+        document.querySelector(`input[name="ui-setting"][value="${currentSize}"]`).checked = true;
+
+        document.getElementById('modal-global-settings').style.display = 'block';
+    }
+
+    function setTheme(theme) {
+        if(theme === 'dark') {
+            document.body.classList.add('dark-mode');
+            localStorage.setItem('dark-mode', 'true');
+        } else {
+            document.body.classList.remove('dark-mode');
+            localStorage.setItem('dark-mode', 'false');
+        }
+    }
+
+    function setUISize(sizeClass) {
+        document.body.classList.remove('ui-xs', 'ui-sm', 'ui-ms', 'ui-md', 'ui-lg', 'ui-xl');
+        document.body.classList.add(sizeClass);
+        localStorage.setItem('ui-size', sizeClass);
     }
 
     let quizzes = JSON.parse(localStorage.getItem('quizzes')) || {};
@@ -641,6 +713,7 @@
     function closeModals() { 
         document.getElementById('modal-settings').style.display = 'none'; 
         document.getElementById('modal-resume').style.display = 'none'; 
+        document.getElementById('modal-global-settings').style.display = 'none';
     }
 
     function executeResume(isResume) {
@@ -712,7 +785,7 @@
         
         renderQuestionsHTML();
         setupSidebar();
-        setupScrollObserver(); // Gọi lần đầu khi load màn hình
+        setupScrollObserver(); 
 
         if (isResume) {
             let savedY = localStorage.getItem('scroll_' + currentQuizId);
@@ -914,7 +987,6 @@
         checkedAnswers[qId] = true;
         localStorage.setItem('checked_' + currentQuizId, JSON.stringify(checkedAnswers));
         
-        // FIX: RENDER XONG PHẢI GẮN LẠI OBSERVER CHỐNG MẤT HIGHLIGHT
         renderQuestionsHTML(); 
         updateSidebarStatus();
         setupScrollObserver(); 
@@ -954,7 +1026,6 @@
         document.getElementById('score-display').innerText = `${totalScore.toFixed(2)} / ${activeQuestions.length} Điểm`;
         document.getElementById('btn-retake-wrong').style.display = wrongQuestionIds.length > 0 ? 'inline-block' : 'none';
 
-        // FIX: RENDER XONG PHẢI GẮN LẠI OBSERVER
         renderQuestionsHTML(); 
         updateSidebarStatus(); 
         setupScrollObserver();
