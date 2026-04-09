@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hệ Thống Quiz V7 - Ultimate Settings</title>
+    <title>Hệ Thống Quiz V8 - Flashcard UI Fixed</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,21 +27,14 @@
             --warning: #fbbc05;
             --font-main: 'Roboto', sans-serif;
             
-            /* Biến kích thước (Mặc định - Vừa) */
-            --fs-main: 15px;
-            --fs-title: 15.5px;
-            --fs-btn: 14px;
-            --pad-card: 20px;
-            --pad-opt: 10px 12px;
+            --fs-main: 15px; --fs-title: 15.5px; --fs-btn: 14px; --pad-card: 20px; --pad-opt: 10px 12px;
         }
 
-        /* 6 MỨC KÍCH THƯỚC GIAO DIỆN */
-        body.ui-xs { --fs-main: 11px; --fs-title: 11.5px; --fs-btn: 10px; --pad-card: 10px; --pad-opt: 5px 6px; } /* Siêu nhỏ */
-        body.ui-sm { --fs-main: 12px; --fs-title: 12.5px; --fs-btn: 11px; --pad-card: 12px; --pad-opt: 6px 8px; } /* Nhỏ */
-        body.ui-ms { --fs-main: 13px; --fs-title: 13.5px; --fs-btn: 12px; --pad-card: 15px; --pad-opt: 8px 10px; } /* Nhỏ vừa */
-        /* Mặc định là md (Vừa) sử dụng :root */
-        body.ui-lg { --fs-main: 17px; --fs-title: 17.5px; --fs-btn: 16px; --pad-card: 25px; --pad-opt: 12px 14px; } /* Lớn */
-        body.ui-xl { --fs-main: 19px; --fs-title: 19.5px; --fs-btn: 18px; --pad-card: 30px; --pad-opt: 14px 16px; } /* Rất lớn */
+        body.ui-xs { --fs-main: 11px; --fs-title: 11.5px; --fs-btn: 10px; --pad-card: 10px; --pad-opt: 5px 6px; } 
+        body.ui-sm { --fs-main: 12px; --fs-title: 12.5px; --fs-btn: 11px; --pad-card: 12px; --pad-opt: 6px 8px; } 
+        body.ui-ms { --fs-main: 13px; --fs-title: 13.5px; --fs-btn: 12px; --pad-card: 15px; --pad-opt: 8px 10px; } 
+        body.ui-lg { --fs-main: 17px; --fs-title: 17.5px; --fs-btn: 16px; --pad-card: 25px; --pad-opt: 12px 14px; } 
+        body.ui-xl { --fs-main: 19px; --fs-title: 19.5px; --fs-btn: 18px; --pad-card: 30px; --pad-opt: 14px 16px; } 
 
         body.dark-mode {
             --bg-body: #18191a; --bg-card: #242526; --text-main: #e4e6eb; --text-muted: #b0b3b8;
@@ -110,6 +103,61 @@
         .mtf-option-label input { margin-right: 6px; transform: scale(1.2); }
         .mtf-feedback { margin-top: 8px; padding: 8px 12px; border-radius: 6px; font-size: calc(var(--fs-main) - 1px); }
         
+        /* ---------------- FLASHCARD CSS FIXED ---------------- */
+        .flashcard-container { perspective: 1000px; cursor: pointer; margin-top: 5px; }
+        .flashcard { display: grid; transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1); width: 100%; min-height: 160px;}
+        .flashcard.is-flipped { transform: rotateY(180deg); }
+        
+        .flashcard-face { 
+            grid-area: 1 / 1; 
+            backface-visibility: hidden; 
+            /* Thêm padding top nhiều hơn để chừa chỗ cho cái nhãn Thẻ */
+            padding: 35px 20px 20px 20px; 
+            border-radius: 10px; 
+            border: 2px solid var(--border); 
+            background: var(--bg-body); 
+            display: flex; 
+            flex-direction: column; /* Quan trọng để code không bị phá vỡ */
+            align-items: center; 
+            justify-content: center; 
+            text-align: center; 
+            box-sizing: border-box;
+            position: relative; /* Để đặt nhãn thẻ absolute */
+            overflow: hidden; /* Chặn tuyệt đối đâm thủng viền */
+        }
+        
+        .flashcard-back { transform: rotateY(180deg); background: var(--success-bg); border-color: var(--success); color: var(--text-main);}
+        
+        /* Nhãn Thẻ ở góc */
+        .fc-label {
+            position: absolute;
+            top: 10px;
+            left: 12px;
+            font-size: 11.5px;
+            color: var(--text-muted);
+            font-weight: 700;
+            opacity: 0.6;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Xử lý text và code bên trong Flashcard để tự động xuống dòng */
+        .fc-content {
+            width: 100%;
+            white-space: pre-line; /* Đảm bảo \n tự xuống dòng */
+            word-wrap: break-word; /* Dài quá tự bẻ */
+        }
+        
+        /* Code trong flashcard được vuốt ngang độc lập */
+        .flashcard-face pre {
+            max-width: 100%;
+            overflow-x: auto;
+            text-align: left;
+            margin: 10px 0;
+            white-space: pre; /* Code thì không wrap */
+        }
+        /* --------------------------------------------------- */
+
         .is-correct, .mtf-row-correct { background-color: var(--success-bg) !important; border-color: var(--success) !important; }
         .is-incorrect, .mtf-row-wrong { background-color: var(--danger-bg) !important; border-color: var(--danger) !important; }
         .card-correct { border-left: 5px solid var(--success); }
@@ -127,7 +175,6 @@
         .quiz-wrapper { display: flex; gap: 20px; align-items: flex-start; position: relative;}
         .quiz-main { flex: 1; min-width: 0; }
         
-        /* CỐ ĐỊNH SIDEBAR LIST (Không dùng CSS Variables để tránh bị thu phóng) */
         .quiz-sidebar { width: 140px; position: sticky; top: 80px; max-height: calc(100vh - 100px); background: var(--bg-card); padding: 15px 10px; border-radius: 12px; border: 1px solid var(--border); display: flex; flex-direction: column; box-shadow: 0 2px 10px rgba(0,0,0,0.05);}
         .sidebar-header { font-weight: 700; text-align: center; border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 10px; font-size: 14px;} 
         
@@ -148,33 +195,16 @@
         .select-checkbox { transform: scale(1.5); margin-right: 15px; cursor: pointer; }
         .edit-bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--bg-card); padding: 12px 20px; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); display: flex; justify-content: center; gap: 10px; z-index: 200; border-top: 1px solid var(--border);}
         
-        /* MOBILE VIEW */
         @media (max-width: 600px) {
             .top-bar { flex-direction: row !important; flex-wrap: nowrap !important; padding: 8px 10px; gap: 5px; }
             .top-bar > div { gap: 5px !important; flex-wrap: nowrap !important; }
             .top-bar button, .top-bar select { padding: 5px 8px !important; font-size: 12.5px !important; margin: 0 !important; }
 
             .quiz-wrapper { gap: 10px; }
-            .quiz-sidebar { 
-                width: 38px; 
-                padding: 10px 4px 15px 4px; 
-                max-height: calc(100vh - 120px); 
-                margin-bottom: 15px; 
-                border-radius: 12px !important; 
-            } 
+            .quiz-sidebar { width: 38px; padding: 10px 4px 15px 4px; max-height: calc(100vh - 120px); margin-bottom: 15px; border-radius: 12px !important; } 
             .sidebar-header { display: none; } 
-            .sidebar-grid { 
-                grid-template-columns: 1fr; 
-                padding-right: 0; 
-                gap: 6px;
-                padding-bottom: 10px; 
-            } 
-            .nav-bubble { 
-                width: 28px; 
-                height: 28px; 
-                font-size: 11px;
-                margin: 0 auto;
-            }
+            .sidebar-grid { grid-template-columns: 1fr; padding-right: 0; gap: 6px; padding-bottom: 10px; } 
+            .nav-bubble { width: 28px; height: 28px; font-size: 11px; margin: 0 auto; }
         }
     </style>
 </head>
@@ -183,20 +213,18 @@
 <div class="container" id="app">
     <div class="header">
         <h2 style="margin:0; font-weight: 700; font-size: 20px;">📝 Hệ Thống Thi Trắc Nghiệm</h2>
-        <!-- NÚT BÁNH RĂNG CÀI ĐẶT -->
         <button class="outline" style="font-size: 22px; padding: 4px 10px;" onclick="openGlobalSettings()">⚙️</button>
     </div>
 
-    <!-- VIEW 1: TRANG CHỦ -->
     <div id="view-home">
-        <div class="card" style="text-align: center;">
+        <div class="card" style="text-align: center; display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
             <input type="file" id="file-input" accept=".json" style="display:none" onchange="importQuiz(event)">
             <button onclick="document.getElementById('file-input').click()">📁 Tải lên File JSON</button>
+            <button class="outline" onclick="openImportTextModal()">📝 Nhập Code JSON</button>
         </div>
         <div class="quiz-grid" id="quiz-list"></div>
     </div>
 
-    <!-- VIEW CHỈNH SỬA QUIZ -->
     <div id="view-edit" class="hidden">
         <div class="top-bar">
             <div><button class="outline" onclick="closeEditView()">⬅ Hủy</button></div>
@@ -221,17 +249,28 @@
         </div>
     </div>
 
-    <!-- MODAL CÀI ĐẶT HỆ THỐNG GIAO DIỆN (ĐÃ UPDATE 6 MỨC) -->
+    <div id="modal-import-text" class="modal">
+        <div class="modal-content" style="max-width:500px;">
+            <h3 style="margin-top:0;">📝 Nhập Code JSON</h3>
+            <label class="edit-label">Dán toàn bộ mã JSON vào đây:</label>
+            <textarea id="import-json-text" style="min-height:200px; font-family:monospace; font-size:13px;"></textarea>
+            <label class="edit-label">Đặt lại tên bài (Không bắt buộc):</label>
+            <input type="text" id="import-json-title" placeholder="Để trống để dùng tên gốc...">
+            <div style="margin-top:15px; display:flex; justify-content:space-between;">
+                <button class="outline" onclick="closeImportTextModal()">Hủy</button>
+                <button class="success" onclick="submitImportText()">Xác nhận Nhập</button>
+            </div>
+        </div>
+    </div>
+
     <div id="modal-global-settings" class="modal">
         <div class="modal-content">
             <h3 style="margin-top:0; border-bottom: 1px solid var(--border); padding-bottom: 10px;">⚙️ Cài đặt hệ thống</h3>
-            
             <div style="margin-bottom: 20px;">
                 <b>Giao diện:</b><br>
                 <label style="display:inline-block; margin-top:10px; cursor:pointer;"><input type="radio" name="theme-setting" value="light" onchange="setTheme('light')"> ☀️ Sáng</label> &nbsp;&nbsp;&nbsp;
                 <label style="display:inline-block; margin-top:10px; cursor:pointer;"><input type="radio" name="theme-setting" value="dark" onchange="setTheme('dark')"> 🌙 Tối</label>
             </div>
-            
             <div style="margin-bottom: 25px;">
                 <b>Kích thước hiển thị:</b><br>
                 <label style="display:block; margin-top:12px; cursor:pointer;"><input type="radio" name="ui-setting" value="ui-xs" onchange="setUISize('ui-xs')"> 🐜 Siêu nhỏ</label>
@@ -241,12 +280,10 @@
                 <label style="display:block; margin-top:12px; cursor:pointer;"><input type="radio" name="ui-setting" value="ui-lg" onchange="setUISize('ui-lg')"> 🔎 Lớn</label>
                 <label style="display:block; margin-top:12px; cursor:pointer;"><input type="radio" name="ui-setting" value="ui-xl" onchange="setUISize('ui-xl')"> 🐘 Rất lớn</label>
             </div>
-
             <button class="outline" style="width:100%;" onclick="closeModals()">Đóng</button>
         </div>
     </div>
 
-    <!-- MODAL RESUME -->
     <div id="modal-resume" class="modal">
         <div class="modal-content">
             <h3 style="margin-top:0;">Phát hiện bài làm dang dở!</h3>
@@ -257,7 +294,6 @@
         </div>
     </div>
 
-    <!-- MODAL SETTING BÀI THI -->
     <div id="modal-settings" class="modal">
         <div class="modal-content">
             <h3 style="margin-top:0;" id="setting-title">⚙️ Tùy chọn bài thi</h3>
@@ -271,7 +307,6 @@
         </div>
     </div>
 
-    <!-- VIEW 2: KHU VỰC LÀM BÀI VÀ XEM ĐIỂM -->
     <div id="view-quiz" class="hidden">
         <div class="top-bar" id="quiz-tools">
             <div style="display:flex; flex-wrap:nowrap; align-items:center;">
@@ -281,6 +316,7 @@
                     <option value="mcq">Khoanh (MCQ)</option>
                     <option value="mtf">Đúng/Sai (MTF)</option>
                     <option value="sa">Trả lời ngắn (SA)</option>
+                    <option value="flashcard">Thẻ ghi nhớ (Flashcard)</option>
                 </select>
             </div>
             <div><button class="success" id="btn-submit-quiz" onclick="submitQuiz()">✅ Nộp Bài</button></div>
@@ -298,6 +334,7 @@
                     <option value="mcq">Lọc theo: Khoanh</option>
                     <option value="mtf">Lọc theo: Đúng/Sai</option>
                     <option value="sa">Lọc theo: Trả lời ngắn</option>
+                    <option value="flashcard">Lọc theo: Thẻ ghi nhớ</option>
                 </select>
                 <input type="text" id="quiz-search-input" style="width: 200px; padding: 6px;" placeholder="Tìm ID hoặc câu hỏi..." onkeyup="filterQuizBySearch()">
             </div>
@@ -325,18 +362,14 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
 
 <script>
-    // KHỞI TẠO CÀI ĐẶT GIAO DIỆN TỪ LOCALSTORAGE
     let savedDarkMode = localStorage.getItem('dark-mode') === 'true';
     if(savedDarkMode) document.body.classList.add('dark-mode');
-    
     let savedUISize = localStorage.getItem('ui-size') || 'ui-md';
     if(savedUISize !== 'ui-md') document.body.classList.add(savedUISize);
 
     function openGlobalSettings() {
-        // Cập nhật trạng thái check hiện tại
         let isDark = document.body.classList.contains('dark-mode');
         document.querySelector(`input[name="theme-setting"][value="${isDark ? 'dark' : 'light'}"]`).checked = true;
-        
         let currentSize = 'ui-md';
         if(document.body.classList.contains('ui-xs')) currentSize = 'ui-xs';
         if(document.body.classList.contains('ui-sm')) currentSize = 'ui-sm';
@@ -344,18 +377,12 @@
         if(document.body.classList.contains('ui-lg')) currentSize = 'ui-lg';
         if(document.body.classList.contains('ui-xl')) currentSize = 'ui-xl';
         document.querySelector(`input[name="ui-setting"][value="${currentSize}"]`).checked = true;
-
         document.getElementById('modal-global-settings').style.display = 'block';
     }
 
     function setTheme(theme) {
-        if(theme === 'dark') {
-            document.body.classList.add('dark-mode');
-            localStorage.setItem('dark-mode', 'true');
-        } else {
-            document.body.classList.remove('dark-mode');
-            localStorage.setItem('dark-mode', 'false');
-        }
+        if(theme === 'dark') { document.body.classList.add('dark-mode'); localStorage.setItem('dark-mode', 'true'); } 
+        else { document.body.classList.remove('dark-mode'); localStorage.setItem('dark-mode', 'false'); }
     }
 
     function setUISize(sizeClass) {
@@ -389,9 +416,7 @@
     window.onclick = function(event) {
         if (!event.target.matches('.menu-dots-btn')) {
             var dropdowns = document.getElementsByClassName("dropdown-content");
-            for (var i = 0; i < dropdowns.length; i++) {
-                dropdowns[i].classList.remove('show-menu');
-            }
+            for (var i = 0; i < dropdowns.length; i++) dropdowns[i].classList.remove('show-menu');
             document.querySelectorAll('.elevated-card').forEach(el => el.classList.remove('elevated-card'));
         }
     }
@@ -437,18 +462,13 @@
         event.stopPropagation();
         let dropdowns = document.getElementsByClassName("dropdown-content");
         for (let i = 0; i < dropdowns.length; i++) {
-            if(dropdowns[i].id !== 'dropdown-'+id && dropdowns[i].id !== 'edit-dropdown-'+id) {
-                dropdowns[i].classList.remove('show-menu');
-            }
+            if(dropdowns[i].id !== 'dropdown-'+id && dropdowns[i].id !== 'edit-dropdown-'+id) dropdowns[i].classList.remove('show-menu');
         }
         document.querySelectorAll('.elevated-card').forEach(el => el.classList.remove('elevated-card'));
-
         let target = document.getElementById('dropdown-' + id) || document.getElementById('edit-dropdown-' + id);
         if(target) {
             let isOpening = target.classList.toggle('show-menu');
-            if(isOpening) {
-                target.closest('.card, .quiz-card').classList.add('elevated-card');
-            }
+            if(isOpening) target.closest('.card, .quiz-card').classList.add('elevated-card');
         }
     }
 
@@ -466,6 +486,30 @@
         };
         reader.readAsText(file);
         event.target.value = ''; 
+    }
+
+    function openImportTextModal() {
+        document.getElementById('import-json-text').value = '';
+        document.getElementById('import-json-title').value = '';
+        document.getElementById('modal-import-text').style.display = 'block';
+    }
+    
+    function closeImportTextModal() { document.getElementById('modal-import-text').style.display = 'none'; }
+
+    function submitImportText() {
+        try {
+            let text = document.getElementById('import-json-text').value;
+            if(!text.trim()) return alert("Vui lòng nhập mã JSON!");
+            let data = JSON.parse(text);
+            let customTitle = document.getElementById('import-json-title').value.trim();
+            if(customTitle) data.title = customTitle;
+            if(!data.id) data.id = 'quiz_' + Date.now();
+            quizzes[data.id] = data;
+            localStorage.setItem('quizzes', JSON.stringify(quizzes));
+            closeImportTextModal();
+            renderHome();
+            alert("Đã nhập thành công!");
+        } catch(e) { alert("Lỗi! Định dạng mã JSON không hợp lệ."); }
     }
 
     function renameQuiz(event, id) {
@@ -502,7 +546,6 @@
         downloadAnchorNode.remove();
     }
 
-    /* --- TÍNH NĂNG CHỈNH SỬA --- */
     function openEditQuiz(event, id) {
         if(event) event.stopPropagation();
         editQuizId = id;
@@ -524,6 +567,9 @@
         
         qz.questions.forEach((q, index) => {
             let chkDisplay = isSelectMode ? 'inline-block' : 'none';
+            let typeName = q.type.toUpperCase();
+            if(q.type === 'flashcard') typeName = "THẺ GHI NHỚ";
+
             let html = `<div class="card edit-block edit-q-item" id="edit-q-${q.id}" data-id="${q.id}" data-text="${(q.text||'').toLowerCase()}">
                 <button class="menu-dots-btn" onclick="toggleDropdown(event, '${q.id}')">⋮</button>
                 <div id="edit-dropdown-${q.id}" class="dropdown-content">
@@ -533,10 +579,10 @@
                 
                 <div style="display:flex; align-items:center;">
                     <input type="checkbox" class="select-checkbox edit-chk" value="${q.id}" style="display:${chkDisplay}">
-                    <b>Câu ${index + 1} (ID: ${q.id} - ${q.type.toUpperCase()}):</b>
+                    <b>Câu ${index + 1} (ID: ${q.id} - ${typeName}):</b>
                 </div>
                 
-                <label class="edit-label">Nội dung câu hỏi:</label>
+                <label class="edit-label">${q.type === 'flashcard' ? 'Mặt trước (Nội dung):' : 'Nội dung câu hỏi:'}</label>
                 <textarea id="val-text-${q.id}">${q.text}</textarea>`;
                 
             if (q.type === 'mcq') {
@@ -566,8 +612,12 @@
                 html += `<label class="edit-label">Đáp án đúng (chính xác):</label>
                 <input type="text" id="val-sa-ans-${q.id}" value="${q.correctAnswer}">`;
             }
+            else if (q.type === 'flashcard') {
+                html += `<label class="edit-label">Mặt sau (Giải thích / Đáp án):</label>
+                <textarea id="val-fc-back-${q.id}">${q.back || ''}</textarea>`;
+            }
 
-            if (q.type !== 'mtf') {
+            if (q.type !== 'mtf' && q.type !== 'flashcard') {
                 html += `<label class="edit-label">Lời giải thích chung:</label>
                 <textarea id="val-exp-${q.id}">${q.explanation || ''}</textarea>`;
             }
@@ -612,16 +662,11 @@
     function toggleSelectMode(status) {
         isSelectMode = status;
         document.getElementById('edit-bottom-bar').classList.toggle('hidden', !status);
-        document.querySelectorAll('.edit-chk').forEach(chk => {
-            chk.style.display = status ? 'inline-block' : 'none';
-            chk.checked = false;
-        });
+        document.querySelectorAll('.edit-chk').forEach(chk => { chk.style.display = status ? 'inline-block' : 'none'; chk.checked = false; });
     }
 
     function selectAllQuestions(checked) {
-        document.querySelectorAll('.edit-chk').forEach(chk => {
-            if(chk.closest('.edit-q-item').style.display !== 'none') chk.checked = checked;
-        });
+        document.querySelectorAll('.edit-chk').forEach(chk => { if(chk.closest('.edit-q-item').style.display !== 'none') chk.checked = checked; });
     }
 
     function deleteSelectedQuestions() {
@@ -629,9 +674,7 @@
         if(selectedIds.length === 0) { alert("Chưa có câu hỏi nào được chọn!"); return; }
         if(confirm(`Bạn sắp xóa ${selectedIds.length} câu hỏi. Chắc chắn chứ?`)) {
             workingQuizCopy.questions = workingQuizCopy.questions.filter(q => !selectedIds.includes(q.id));
-            saveCurrentEditDataToRAM();
-            renderEditQuestions();
-            toggleSelectMode(false);
+            saveCurrentEditDataToRAM(); renderEditQuestions(); toggleSelectMode(false);
         }
     }
 
@@ -654,25 +697,21 @@
                 } else if(q.type==='sa') {
                     q.correctAnswer = document.getElementById(`val-sa-ans-${q.id}`).value;
                     q.explanation = document.getElementById(`val-exp-${q.id}`).value;
+                } else if(q.type==='flashcard') {
+                    q.back = document.getElementById(`val-fc-back-${q.id}`).value;
                 }
             }
         });
     }
 
     function saveEditQuiz() {
-        saveCurrentEditDataToRAM();
-        quizzes[editQuizId] = workingQuizCopy; 
-        localStorage.setItem('quizzes', JSON.stringify(quizzes));
-        workingQuizCopy = null; 
-        alert("Đã lưu thành công!");
-        renderHome();
+        saveCurrentEditDataToRAM(); quizzes[editQuizId] = workingQuizCopy; 
+        localStorage.setItem('quizzes', JSON.stringify(quizzes)); workingQuizCopy = null; 
+        alert("Đã lưu thành công!"); renderHome();
     }
 
     function closeEditView() { 
-        if(confirm("Hủy bỏ mọi thay đổi?")) {
-            workingQuizCopy = null; 
-            renderHome(); 
-        }
+        if(confirm("Hủy bỏ mọi thay đổi?")) { workingQuizCopy = null; renderHome(); }
     }
 
     function exportAssignHTML(event, id) {
@@ -703,8 +742,7 @@
 
     /* --- LUỒNG LÀM BÀI --- */
     function handleQuizClick(id, hasProgress) {
-        currentQuizId = id;
-        isRetakeWrong = false; 
+        currentQuizId = id; isRetakeWrong = false; 
         document.getElementById('setting-title').innerText = "⚙️ Tùy chọn bài thi";
         if (hasProgress) document.getElementById('modal-resume').style.display = 'block'; 
         else document.getElementById('modal-settings').style.display = 'block';
@@ -714,6 +752,7 @@
         document.getElementById('modal-settings').style.display = 'none'; 
         document.getElementById('modal-resume').style.display = 'none'; 
         document.getElementById('modal-global-settings').style.display = 'none';
+        document.getElementById('modal-import-text').style.display = 'none';
     }
 
     function executeResume(isResume) {
@@ -770,12 +809,8 @@
         
         let topFilter = document.getElementById('filter-top');
         topFilter.value = 'all';
-        
-        if(settings.mode === 'instant') {
-            topFilter.classList.remove('hidden');
-        } else {
-            topFilter.classList.add('hidden');
-        }
+        if(settings.mode === 'instant') topFilter.classList.remove('hidden');
+        else topFilter.classList.add('hidden');
         
         document.getElementById('filter-result').value = 'all';
         document.getElementById('quiz-search-input').value = '';
@@ -793,8 +828,13 @@
         } else { window.scrollTo(0, 0); }
     }
 
+    // FIX LỖI TÁCH CHUỖI GÂY VỠ CODE
     function formatQuestionText(text) {
         if(!text) return '';
+        // Nếu có chứa thẻ code thì tuyệt đối KHÔNG tách chuỗi, nhường CSS lo hiển thị
+        if(text.includes('<pre>') || text.includes('<code>')) {
+            return text; 
+        }
         if(text.includes('\n')) {
             let parts = text.split('\n');
             let firstLine = parts.shift();
@@ -804,6 +844,14 @@
             }
         }
         return text;
+    }
+
+    function flipCard(qId) {
+        let card = document.getElementById('flashcard-' + qId);
+        card.classList.toggle('is-flipped');
+        userAnswers[qId] = true; 
+        saveProgress();
+        updateSidebarStatus();
     }
 
     function renderQuestionsHTML() {
@@ -829,66 +877,88 @@
                     let cAns = q.correctAnswer.toString().toLowerCase().trim();
                     isCorrectCard = (uAns === cAns);
                 }
-                reviewClass = isCorrectCard ? 'card-correct' : 'card-wrong';
+                if (q.type !== 'flashcard') {
+                    reviewClass = isCorrectCard ? 'card-correct' : 'card-wrong';
+                }
             }
 
-            let html = `<div class="card review-item ${reviewClass}" id="block-${q.id}" data-qtype="${q.type}" data-search="${searchableText}">
-                <div class="question-title"><strong>Câu ${index + 1}:</strong> ${formatQuestionText(q.text)}</div>`;
+            let html = `<div class="card review-item ${reviewClass}" id="block-${q.id}" data-qtype="${q.type}" data-search="${searchableText}">`;
             
-            if (q.type === 'mcq') {
-                q.options.forEach((opt, idx) => {
-                    let checked = userAnswers[q.id] === idx ? 'checked' : '';
-                    let disabled = (isReviewMode || checkedAnswers[q.id]) ? 'disabled' : '';
-                    let labelClass = "";
-                    if (isReviewMode || checkedAnswers[q.id]) {
-                        if (idx === q.correctIndex) labelClass = 'is-correct';
-                        else if (userAnswers[q.id] === idx && idx !== q.correctIndex) labelClass = 'is-incorrect';
-                    }
-                    html += `<label class="option-label ${labelClass}">
-                        <input type="radio" name="q-${q.id}" value="${idx}" ${checked} ${disabled} onchange="handleInput('${q.id}', ${idx})"> ${opt}
-                    </label>`;
-                });
-            } 
-            else if (q.type === 'mtf') {
-                if(!userAnswers[q.id]) userAnswers[q.id] = new Array(q.statements.length).fill(null);
-                let ansArr = userAnswers[q.id];
-                q.statements.forEach((stmt, sIdx) => {
-                    let isT = ansArr[sIdx] === true ? 'checked' : '';
-                    let isF = ansArr[sIdx] === false ? 'checked' : '';
-                    let disabled = (isReviewMode || checkedAnswers[q.id]) ? 'disabled' : '';
-                    let feedbackRow = "";
-                    if (isReviewMode || checkedAnswers[q.id]) {
-                        let isRowRight = (ansArr[sIdx] === q.correctAnswers[sIdx]);
-                        let rowClass = isRowRight ? "mtf-row-correct" : "mtf-row-wrong";
-                        let correctStr = q.correctAnswers[sIdx] ? "Đúng" : "Sai";
-                        let expText = (q.explanations && q.explanations[sIdx]) ? q.explanations[sIdx] : "";
-                        feedbackRow = `<div class="mtf-feedback ${rowClass}"><b>${isRowRight?"✔️":"❌"} Đáp án: ${correctStr}</b>${expText ? `<br><span style="color:var(--text-muted); font-size: 13px;">💡 <i>${expText}</i></span>` : ''}</div>`;
-                    }
-                    html += `<div class="mtf-item">
-                        <div class="mtf-text">${stmt}</div>
-                        <div class="mtf-options">
-                            <label class="mtf-option-label"><input type="radio" name="mtf-${q.id}-${sIdx}" value="true" ${isT} ${disabled} onchange="handleInputMTF('${q.id}', ${sIdx}, true)"> Đúng</label>
-                            <label class="mtf-option-label"><input type="radio" name="mtf-${q.id}-${sIdx}" value="false" ${isF} ${disabled} onchange="handleInputMTF('${q.id}', ${sIdx}, false)"> Sai</label>
+            // RENDERING FLASHCARD VỚI NHÃN NẰM BÊN TRONG
+            if (q.type === 'flashcard') {
+                let isFlipped = userAnswers[q.id] ? 'is-flipped' : '';
+                html += `
+                <div class="flashcard-container" onclick="flipCard('${q.id}')">
+                    <div class="flashcard ${isFlipped}" id="flashcard-${q.id}">
+                        <div class="flashcard-face flashcard-front">
+                            <div class="fc-label">Thẻ ${index + 1}</div>
+                            <div class="fc-content">${formatQuestionText(q.text)}</div>
                         </div>
-                        ${feedbackRow}
-                    </div>`;
-                });
-            }
-            else if (q.type === 'sa') {
-                let val = userAnswers[q.id] || '';
-                let disabled = (isReviewMode || checkedAnswers[q.id]) ? 'disabled' : '';
-                html += `<input type="text" id="sa-${q.id}" value="${val}" ${disabled} oninput="handleInput('${q.id}', this.value)" placeholder="Nhập đáp án...">`;
-            }
+                        <div class="flashcard-face flashcard-back">
+                            <div class="fc-label">Thẻ ${index + 1} (Mặt sau)</div>
+                            <div class="fc-content">${formatQuestionText(q.back)}</div>
+                        </div>
+                    </div>
+                </div>
+                <div style="text-align:center; font-size:12px; color:var(--text-muted); margin-top:8px;">👆 Nhấn vào thẻ để lật</div>`;
+            } 
+            // RENDERING CÂU HỎI THƯỜNG
+            else {
+                html += `<div class="question-title"><strong>Câu ${index + 1}:</strong> ${formatQuestionText(q.text)}</div>`;
+                if (q.type === 'mcq') {
+                    q.options.forEach((opt, idx) => {
+                        let checked = userAnswers[q.id] === idx ? 'checked' : '';
+                        let disabled = (isReviewMode || checkedAnswers[q.id]) ? 'disabled' : '';
+                        let labelClass = "";
+                        if (isReviewMode || checkedAnswers[q.id]) {
+                            if (idx === q.correctIndex) labelClass = 'is-correct';
+                            else if (userAnswers[q.id] === idx && idx !== q.correctIndex) labelClass = 'is-incorrect';
+                        }
+                        html += `<label class="option-label ${labelClass}">
+                            <input type="radio" name="q-${q.id}" value="${idx}" ${checked} ${disabled} onchange="handleInput('${q.id}', ${idx})"> ${opt}
+                        </label>`;
+                    });
+                } 
+                else if (q.type === 'mtf') {
+                    if(!userAnswers[q.id]) userAnswers[q.id] = new Array(q.statements.length).fill(null);
+                    let ansArr = userAnswers[q.id];
+                    q.statements.forEach((stmt, sIdx) => {
+                        let isT = ansArr[sIdx] === true ? 'checked' : '';
+                        let isF = ansArr[sIdx] === false ? 'checked' : '';
+                        let disabled = (isReviewMode || checkedAnswers[q.id]) ? 'disabled' : '';
+                        let feedbackRow = "";
+                        if (isReviewMode || checkedAnswers[q.id]) {
+                            let isRowRight = (ansArr[sIdx] === q.correctAnswers[sIdx]);
+                            let rowClass = isRowRight ? "mtf-row-correct" : "mtf-row-wrong";
+                            let correctStr = q.correctAnswers[sIdx] ? "Đúng" : "Sai";
+                            let expText = (q.explanations && q.explanations[sIdx]) ? q.explanations[sIdx] : "";
+                            feedbackRow = `<div class="mtf-feedback ${rowClass}"><b>${isRowRight?"✔️":"❌"} Đáp án: ${correctStr}</b>${expText ? `<br><span style="color:var(--text-muted); font-size: 13px;">💡 <i>${expText}</i></span>` : ''}</div>`;
+                        }
+                        html += `<div class="mtf-item">
+                            <div class="mtf-text">${stmt}</div>
+                            <div class="mtf-options">
+                                <label class="mtf-option-label"><input type="radio" name="mtf-${q.id}-${sIdx}" value="true" ${isT} ${disabled} onchange="handleInputMTF('${q.id}', ${sIdx}, true)"> Đúng</label>
+                                <label class="mtf-option-label"><input type="radio" name="mtf-${q.id}-${sIdx}" value="false" ${isF} ${disabled} onchange="handleInputMTF('${q.id}', ${sIdx}, false)"> Sai</label>
+                            </div>
+                            ${feedbackRow}
+                        </div>`;
+                    });
+                }
+                else if (q.type === 'sa') {
+                    let val = userAnswers[q.id] || '';
+                    let disabled = (isReviewMode || checkedAnswers[q.id]) ? 'disabled' : '';
+                    html += `<input type="text" id="sa-${q.id}" value="${val}" ${disabled} oninput="handleInput('${q.id}', this.value)" placeholder="Nhập đáp án...">`;
+                }
 
-            if (settings.mode === 'instant' && !isReviewMode) {
-                let btnDisabled = checkedAnswers[q.id] ? 'disabled' : '';
-                html += `<br><button id="btn-chk-${q.id}" class="outline" style="margin-top:10px" onclick="clickCheckAnswer('${q.id}')" ${btnDisabled}>${checkedAnswers[q.id] ? 'Đã kiểm tra' : '🔍 Kiểm tra đáp án'}</button>`;
-            }
+                if (settings.mode === 'instant' && !isReviewMode) {
+                    let btnDisabled = checkedAnswers[q.id] ? 'disabled' : '';
+                    html += `<br><button id="btn-chk-${q.id}" class="outline" style="margin-top:10px" onclick="clickCheckAnswer('${q.id}')" ${btnDisabled}>${checkedAnswers[q.id] ? 'Đã kiểm tra' : '🔍 Kiểm tra đáp án'}</button>`;
+                }
 
-            if (q.type !== 'mtf') {
                 let displayFb = (isReviewMode || checkedAnswers[q.id]) ? 'block' : 'none';
                 html += `<div id="feedback-${q.id}" class="feedback-box" style="display: ${displayFb}">${generateFeedbackHTML(q)}</div>`;
             }
+            
             html += `</div>`;
             container.innerHTML += html;
         });
@@ -926,7 +996,10 @@
             if(q.type === 'mtf' && userAnswers[q.id]) hasAnswer = !userAnswers[q.id].includes(null) && userAnswers[q.id].length > 0;
             else if (userAnswers[q.id] !== undefined && userAnswers[q.id] !== '') hasAnswer = true;
 
-            if (isReviewMode || checkedAnswers[q.id]) {
+            if (q.type === 'flashcard') {
+                if (hasAnswer) bubble.classList.add('answered-exam');
+            } 
+            else if (isReviewMode || checkedAnswers[q.id]) {
                 let isRight = false;
                 if(q.type === 'mcq') isRight = userAnswers[q.id] === q.correctIndex;
                 else if (q.type === 'sa') isRight = (userAnswers[q.id]||"").toString().toLowerCase().trim() === q.correctAnswer.toString().toLowerCase().trim();
@@ -961,6 +1034,7 @@
     }
 
     function generateFeedbackHTML(q) {
+        if(q.type === 'flashcard') return '';
         let isRight = false;
         if (q.type === 'mcq') isRight = userAnswers[q.id] === q.correctIndex; 
         else if (q.type === 'sa') isRight = (userAnswers[q.id]||"").toString().toLowerCase().trim() === q.correctAnswer.toString().toLowerCase().trim();
@@ -1001,10 +1075,16 @@
         localStorage.removeItem('scroll_' + currentQuizId);
         
         isReviewMode = true; 
-        let totalScore = 0; wrongQuestionIds =[];
+        let totalScore = 0; 
+        let maxScore = 0; 
+        wrongQuestionIds =[];
 
         activeQuestions.forEach(q => {
+            if(q.type === 'flashcard') return; 
+            
+            maxScore += 1;
             let isCorrect = false;
+            
             if(q.type === 'mcq' && userAnswers[q.id] === q.correctIndex) { totalScore += 1; isCorrect = true; }
             else if (q.type === 'sa' && (userAnswers[q.id]||"").toString().toLowerCase().trim() === q.correctAnswer.toString().toLowerCase().trim()) { totalScore += 1; isCorrect = true; }
             else if (q.type === 'mtf') {
@@ -1023,7 +1103,7 @@
         document.getElementById('btn-submit-quiz').style.display = 'none'; 
         
         document.getElementById('score-board').classList.remove('hidden'); 
-        document.getElementById('score-display').innerText = `${totalScore.toFixed(2)} / ${activeQuestions.length} Điểm`;
+        document.getElementById('score-display').innerText = `${totalScore.toFixed(2)} / ${maxScore} Điểm`;
         document.getElementById('btn-retake-wrong').style.display = wrongQuestionIds.length > 0 ? 'inline-block' : 'none';
 
         renderQuestionsHTML(); 
