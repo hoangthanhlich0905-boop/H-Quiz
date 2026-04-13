@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <link id="prism-stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
     
     <script>
         window.MathJax = {
@@ -103,60 +103,32 @@
         .mtf-option-label input { margin-right: 6px; transform: scale(1.2); }
         .mtf-feedback { margin-top: 8px; padding: 8px 12px; border-radius: 6px; font-size: calc(var(--fs-main) - 1px); }
         
-        /* ---------------- FLASHCARD CSS FIXED ---------------- */
+        /* ---------------- FLASHCARD CSS ---------------- */
         .flashcard-container { perspective: 1000px; cursor: pointer; margin-top: 5px; }
         .flashcard { display: grid; transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1); width: 100%; min-height: 160px;}
         .flashcard.is-flipped { transform: rotateY(180deg); }
-        
-        .flashcard-face { 
-            grid-area: 1 / 1; 
-            backface-visibility: hidden; 
-            /* Thêm padding top nhiều hơn để chừa chỗ cho cái nhãn Thẻ */
-            padding: 35px 20px 20px 20px; 
-            border-radius: 10px; 
-            border: 2px solid var(--border); 
-            background: var(--bg-body); 
-            display: flex; 
-            flex-direction: column; /* Quan trọng để code không bị phá vỡ */
-            align-items: center; 
-            justify-content: center; 
-            text-align: center; 
-            box-sizing: border-box;
-            position: relative; /* Để đặt nhãn thẻ absolute */
-            overflow: hidden; /* Chặn tuyệt đối đâm thủng viền */
-        }
-        
+        .flashcard-face { grid-area: 1 / 1; backface-visibility: hidden; padding: 35px 20px 20px 20px; border-radius: 10px; border: 2px solid var(--border); background: var(--bg-body); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; box-sizing: border-box; position: relative; overflow: hidden; }
         .flashcard-back { transform: rotateY(180deg); background: var(--success-bg); border-color: var(--success); color: var(--text-main);}
+        .fc-label { position: absolute; top: 10px; left: 12px; font-size: 11.5px; color: var(--text-muted); font-weight: 700; opacity: 0.6; text-transform: uppercase; letter-spacing: 0.5px; }
+        .fc-content { width: 100%; white-space: pre-line; word-wrap: break-word; }
+        .flashcard-face pre { max-width: 100%; overflow-x: auto; text-align: left; margin: 10px 0; white-space: pre; }
         
-        /* Nhãn Thẻ ở góc */
-        .fc-label {
-            position: absolute;
-            top: 10px;
-            left: 12px;
-            font-size: 11.5px;
-            color: var(--text-muted);
-            font-weight: 700;
-            opacity: 0.6;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        /* Xử lý text và code bên trong Flashcard để tự động xuống dòng */
-        .fc-content {
-            width: 100%;
-            white-space: pre-line; /* Đảm bảo \n tự xuống dòng */
-            word-wrap: break-word; /* Dài quá tự bẻ */
-        }
+        /* ---------------- MEDIA CSS ---------------- */
+        .media-container { display: flex; flex-direction: column; gap: 10px; margin: 10px 0; width: 100%; align-items: center;}
+        .media-container img { max-width: 100%; border-radius: 8px; border: 1px solid var(--border); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .media-container video { max-width: 100%; border-radius: 8px; border: 1px solid var(--border); }
+        .media-container audio { width: 100%; max-width: 400px; }
+        .edit-media-preview { display: flex; align-items: center; justify-content: space-between; background: var(--bg-body); padding: 5px 10px; border-radius: 6px; border: 1px dashed var(--border); margin-top: 5px;}
         
-        /* Code trong flashcard được vuốt ngang độc lập */
-        .flashcard-face pre {
-            max-width: 100%;
-            overflow-x: auto;
-            text-align: left;
-            margin: 10px 0;
-            white-space: pre; /* Code thì không wrap */
-        }
-        /* --------------------------------------------------- */
+        /* ---------------- NÚT NỔI FAB ---------------- */
+        .fab-container { position: fixed; bottom: 25px; right: 25px; z-index: 1000; display: flex; flex-direction: column-reverse; align-items: flex-end; gap: 15px; }
+        .fab-button { width: 56px; height: 56px; border-radius: 50%; background-color: var(--success); color: white; font-size: 28px; border: none; box-shadow: 0 4px 12px rgba(0,0,0,0.3); cursor: pointer; display: flex; justify-content: center; align-items: center; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 0.3s; margin: 0; padding: 0; line-height: 1; }
+        .fab-button:hover { transform: scale(1.08); filter: brightness(1.1); }
+        .fab-button.active { transform: rotate(45deg); background-color: var(--danger); }
+        .fab-menu { display: flex; flex-direction: column; gap: 10px; align-items: flex-end; opacity: 0; visibility: hidden; transform: translateY(20px) scale(0.9); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); transform-origin: bottom right; }
+        .fab-menu.show { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
+        .fab-item { background-color: var(--bg-card); color: var(--text-main); border: 1px solid var(--border); padding: 10px 18px; border-radius: 25px; font-size: 14px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.1); transition: all 0.2s; white-space: nowrap; margin: 0; }
+        .fab-item:hover { background-color: var(--primary); color: white; border-color: var(--primary); transform: translateX(-5px);}
 
         .is-correct, .mtf-row-correct { background-color: var(--success-bg) !important; border-color: var(--success) !important; }
         .is-incorrect, .mtf-row-wrong { background-color: var(--danger-bg) !important; border-color: var(--danger) !important; }
@@ -169,8 +141,8 @@
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
         .top-bar { position: sticky; top: 0; background: var(--bg-card); padding: 12px 15px; border-bottom: 1px solid var(--border); z-index: 100; display: flex; justify-content: space-between; align-items: center; border-radius: 0 0 12px 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin: -15px -15px 15px -15px; flex-wrap: wrap; gap:10px;}
 
-        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); backdrop-filter: blur(2px); }
-        .modal-content { background: var(--bg-card); margin: 15% auto; padding: 20px; width: 90%; max-width: 400px; border-radius: 12px; border: 1px solid var(--border); }
+        .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); backdrop-filter: blur(2px); overflow-y: auto;}
+        .modal-content { background: var(--bg-card); margin: 5% auto; padding: 20px; width: 90%; max-width: 500px; border-radius: 12px; border: 1px solid var(--border); }
 
         .quiz-wrapper { display: flex; gap: 20px; align-items: flex-start; position: relative;}
         .quiz-main { flex: 1; min-width: 0; }
@@ -193,7 +165,8 @@
         .edit-row { display: flex; align-items: center; gap: 10px; margin-bottom: 5px; }
         
         .select-checkbox { transform: scale(1.5); margin-right: 15px; cursor: pointer; }
-        .edit-bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--bg-card); padding: 12px 20px; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); display: flex; justify-content: center; gap: 10px; z-index: 200; border-top: 1px solid var(--border);}
+        
+        .edit-bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--bg-card); padding: 12px 20px; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; z-index: 200; border-top: 1px solid var(--border);}
         
         @media (max-width: 600px) {
             .top-bar { flex-direction: row !important; flex-wrap: nowrap !important; padding: 8px 10px; gap: 5px; }
@@ -205,6 +178,10 @@
             .sidebar-header { display: none; } 
             .sidebar-grid { grid-template-columns: 1fr; padding-right: 0; gap: 6px; padding-bottom: 10px; } 
             .nav-bubble { width: 28px; height: 28px; font-size: 11px; margin: 0 auto; }
+            
+            .fab-container { bottom: 20px; right: 20px; }
+            .fab-button { width: 50px; height: 50px; font-size: 24px; }
+            .edit-bottom-bar button { padding: 6px 10px; font-size: 12.5px; flex-grow: 1;}
         }
     </style>
 </head>
@@ -221,6 +198,7 @@
             <input type="file" id="file-input" accept=".json" style="display:none" onchange="importQuiz(event)">
             <button onclick="document.getElementById('file-input').click()">📁 Tải lên File JSON</button>
             <button class="outline" onclick="openImportTextModal()">📝 Nhập Code JSON</button>
+            <button class="success" onclick="createNewQuiz()">➕ Tạo Quiz Thủ Công</button>
         </div>
         <div class="quiz-grid" id="quiz-list"></div>
     </div>
@@ -239,13 +217,47 @@
             <input type="text" id="edit-search-input" placeholder="Nhập ID câu hỏi hoặc nội dung..." onkeyup="filterEditQuestions()">
         </div>
         
-        <div id="edit-questions-container"></div>
+        <div id="edit-questions-container" style="padding-bottom: 80px;"></div>
+        
+        <div class="fab-container" id="fab-wrapper">
+            <button class="fab-button" id="fab-main" onclick="toggleFabMenu()">➕</button>
+            <div class="fab-menu" id="fab-menu">
+                <button class="fab-item" onclick="addNewQuestion('flashcard'); toggleFabMenu()">🔖 Thêm Thẻ Flashcard</button>
+                <button class="fab-item" onclick="addNewQuestion('sa'); toggleFabMenu()">✍️ Thêm Trả lời ngắn</button>
+                <button class="fab-item" onclick="addNewQuestion('mtf'); toggleFabMenu()">✅ Thêm Đúng/Sai</button>
+                <button class="fab-item" onclick="addNewQuestion('mcq'); toggleFabMenu()">🔘 Thêm Khoanh</button>
+            </div>
+        </div>
         
         <div id="edit-bottom-bar" class="edit-bottom-bar hidden">
             <button class="outline" onclick="selectAllQuestions(true)">☑️ Chọn tất cả</button>
             <button class="outline" onclick="selectAllQuestions(false)">🔲 Hủy chọn</button>
             <button class="danger" onclick="deleteSelectedQuestions()">🗑️ Xóa đã chọn</button>
             <button class="warning" onclick="toggleSelectMode(false)">❌ Đóng</button>
+        </div>
+    </div>
+
+    <!-- MODAL THÊM PHƯƠNG TIỆN (MEDIA) -->
+    <div id="modal-add-media" class="modal">
+        <div class="modal-content">
+            <h3 style="margin-top:0; border-bottom: 1px solid var(--border); padding-bottom: 10px;">🖼️ Thêm Đa Phương Tiện (Ảnh/Video/Audio)</h3>
+            <input type="hidden" id="media-target-id">
+            
+            <label class="edit-label">1. Tải file từ thiết bị (Tự động chuyển thành Base64):</label>
+            <input type="file" id="media-file-picker" accept="image/*,video/*,audio/*" style="border:none; padding:0; margin-top:5px;" onchange="handleMediaFileSelect(event)">
+            
+            <label class="edit-label" style="margin-top:15px;">Hoặc 2. Dán mã Base64 thủ công:</label>
+            <textarea id="media-base64-input" style="min-height:80px; font-family:monospace; font-size:12px;" placeholder="data:image/png;base64,..."></textarea>
+            
+            <label class="edit-label" style="margin-top:15px;">Hoặc 3. Dán Link URL (Trực tiếp từ Internet):</label>
+            <input type="text" id="media-url-input" placeholder="https://example.com/image.jpg">
+            
+            <div style="margin-top: 10px; font-size: 12px; color: var(--danger);">* Lưu ý: Chỉ điền vào ô Base64 HOẶC ô Link URL. Tránh dùng Base64 cho Video quá nặng gây đầy bộ nhớ thiết bị.</div>
+            
+            <div style="margin-top:20px; display:flex; justify-content:space-between;">
+                <button class="outline" onclick="closeMediaModal()">Hủy</button>
+                <button class="success" onclick="submitMedia()">Xác nhận Thêm</button>
+            </div>
         </div>
     </div>
 
@@ -363,7 +375,11 @@
 
 <script>
     let savedDarkMode = localStorage.getItem('dark-mode') === 'true';
-    if(savedDarkMode) document.body.classList.add('dark-mode');
+    if(savedDarkMode) {
+        document.body.classList.add('dark-mode');
+        document.getElementById('prism-stylesheet').href = "https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css";
+    }
+    
     let savedUISize = localStorage.getItem('ui-size') || 'ui-md';
     if(savedUISize !== 'ui-md') document.body.classList.add(savedUISize);
 
@@ -381,8 +397,17 @@
     }
 
     function setTheme(theme) {
-        if(theme === 'dark') { document.body.classList.add('dark-mode'); localStorage.setItem('dark-mode', 'true'); } 
-        else { document.body.classList.remove('dark-mode'); localStorage.setItem('dark-mode', 'false'); }
+        let prismLink = document.getElementById('prism-stylesheet');
+        if(theme === 'dark') { 
+            document.body.classList.add('dark-mode'); 
+            localStorage.setItem('dark-mode', 'true'); 
+            if(prismLink) prismLink.href = "https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css";
+        } 
+        else { 
+            document.body.classList.remove('dark-mode'); 
+            localStorage.setItem('dark-mode', 'false'); 
+            if(prismLink) prismLink.href = "https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css";
+        }
     }
 
     function setUISize(sizeClass) {
@@ -419,6 +444,21 @@
             for (var i = 0; i < dropdowns.length; i++) dropdowns[i].classList.remove('show-menu');
             document.querySelectorAll('.elevated-card').forEach(el => el.classList.remove('elevated-card'));
         }
+        if (!event.target.closest('.fab-container')) {
+            var fabMenu = document.getElementById('fab-menu');
+            var fabBtn = document.getElementById('fab-main');
+            if (fabMenu && fabMenu.classList.contains('show')) {
+                fabMenu.classList.remove('show');
+                fabBtn.classList.remove('active');
+            }
+        }
+    }
+
+    function toggleFabMenu() {
+        const menu = document.getElementById('fab-menu');
+        const btn = document.getElementById('fab-main');
+        menu.classList.toggle('show');
+        btn.classList.toggle('active');
     }
 
     async function triggerMathJaxAndPrism() {
@@ -448,7 +488,6 @@
                     <button onclick="renameQuiz(event, '${id}')">✏️ Đổi tên</button>
                     <button onclick="openEditQuiz(event, '${id}')">🛠️ Chỉnh sửa Quiz</button>
                     <button onclick="exportJSON(event, '${id}')">💾 Tải JSON</button>
-                    <button onclick="exportAssignHTML(event, '${id}')">🔗 Giao bài (HTML)</button>
                     <button class="danger-text" onclick="deleteQuiz(event, '${id}')">🗑️ Xóa</button>
                 </div>
                 ${hasProgress ? '<span class="status-badge">Đang làm dở</span>' : ''}
@@ -479,6 +518,7 @@
         reader.onload = function(e) {
             try {
                 const data = JSON.parse(e.target.result);
+                if(!data.media) data.media = {}; // Đảm bảo luôn có object media
                 quizzes[data.id] = data;
                 localStorage.setItem('quizzes', JSON.stringify(quizzes));
                 renderHome();
@@ -501,6 +541,7 @@
             let text = document.getElementById('import-json-text').value;
             if(!text.trim()) return alert("Vui lòng nhập mã JSON!");
             let data = JSON.parse(text);
+            if(!data.media) data.media = {};
             let customTitle = document.getElementById('import-json-title').value.trim();
             if(customTitle) data.title = customTitle;
             if(!data.id) data.id = 'quiz_' + Date.now();
@@ -537,19 +578,31 @@
 
     function exportJSON(event, id) {
         event.stopPropagation();
-        let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(quizzes[id], null, 2));
+        let targetQuiz = JSON.parse(JSON.stringify(quizzes[id])); // Clone
+        // Dọn dẹp object media trống trước khi xuất file
+        if(targetQuiz.media) {
+            for (let key in targetQuiz.media) {
+                if (!targetQuiz.media[key] || targetQuiz.media[key].length === 0) delete targetQuiz.media[key];
+            }
+        }
+        let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(targetQuiz, null, 2));
         let downloadAnchorNode = document.createElement('a');
         downloadAnchorNode.setAttribute("href", dataStr);
-        downloadAnchorNode.setAttribute("download", quizzes[id].id + ".json");
+        downloadAnchorNode.setAttribute("download", targetQuiz.id + ".json");
         document.body.appendChild(downloadAnchorNode);
         downloadAnchorNode.click();
         downloadAnchorNode.remove();
     }
 
-    function openEditQuiz(event, id) {
-        if(event) event.stopPropagation();
-        editQuizId = id;
-        workingQuizCopy = JSON.parse(JSON.stringify(quizzes[id])); 
+    function createNewQuiz() {
+        let newId = 'quiz_' + Date.now();
+        workingQuizCopy = {
+            id: newId,
+            title: "Bài thi mới (Chưa đặt tên)",
+            questions: [],
+            media: {} // Thêm object quản lý Media
+        };
+        editQuizId = newId;
         isSelectMode = false;
         
         document.getElementById('edit-bottom-bar').classList.add('hidden');
@@ -557,8 +610,128 @@
         document.getElementById('view-edit').classList.remove('hidden');
         document.getElementById('edit-search-input').value = '';
         document.getElementById('edit-quiz-title').value = workingQuizCopy.title;
+        document.getElementById('fab-wrapper').style.display = 'flex'; 
+        
         renderEditQuestions();
     }
+
+    function openEditQuiz(event, id) {
+        if(event) event.stopPropagation();
+        editQuizId = id;
+        workingQuizCopy = JSON.parse(JSON.stringify(quizzes[id])); 
+        if(!workingQuizCopy.media) workingQuizCopy.media = {}; // Đảm bảo tương thích quiz cũ
+        isSelectMode = false;
+        
+        document.getElementById('edit-bottom-bar').classList.add('hidden');
+        document.getElementById('view-home').classList.add('hidden');
+        document.getElementById('view-edit').classList.remove('hidden');
+        document.getElementById('edit-search-input').value = '';
+        document.getElementById('edit-quiz-title').value = workingQuizCopy.title;
+        document.getElementById('fab-wrapper').style.display = 'flex'; 
+        
+        renderEditQuestions();
+    }
+
+    function addNewQuestion(type) {
+        saveCurrentEditDataToRAM();
+        
+        let newQ = {
+            id: 'q_' + Date.now() + '_' + Math.floor(Math.random() * 1000),
+            type: type,
+            text: ""
+        };
+
+        if (type === 'mcq') {
+            newQ.options = ["Đáp án 1", "Đáp án 2", "Đáp án 3", "Đáp án 4"];
+            newQ.correctIndex = 0;
+            newQ.explanation = "";
+        } else if (type === 'mtf') {
+            newQ.statements = ["Mệnh đề 1", "Mệnh đề 2", "Mệnh đề 3", "Mệnh đề 4"];
+            newQ.correctAnswers = [true, false, true, false];
+            newQ.explanations = ["", "", "", ""];
+        } else if (type === 'sa') {
+            newQ.correctAnswer = "";
+            newQ.explanation = "";
+        } else if (type === 'flashcard') {
+            newQ.back = "";
+        }
+
+        workingQuizCopy.questions.push(newQ);
+        renderEditQuestions();
+        
+        setTimeout(() => {
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        }, 100);
+    }
+
+    // --- HÀM XỬ LÝ MEDIA TRONG LÚC EDIT ---
+    function renderEditMediaPreview(targetId) {
+        if (!workingQuizCopy.media || !workingQuizCopy.media[targetId] || workingQuizCopy.media[targetId].length === 0) return '';
+        let html = '<div style="margin-top:5px;">';
+        workingQuizCopy.media[targetId].forEach((m, idx) => {
+            let label = m.url ? "Link URL" : "Base64 (Tệp tải lên)";
+            let isVid = (m.url && m.url.match(/\.(mp4|webm|ogg)$/i)) || (m.base64 && m.base64.includes('video/'));
+            let isAud = (m.url && m.url.match(/\.(mp3|wav|ogg)$/i)) || (m.base64 && m.base64.includes('audio/'));
+            let typeLabel = isVid ? "🎥 Video" : (isAud ? "🎵 Audio" : "🖼️ Ảnh");
+            
+            html += `<div class="edit-media-preview">
+                <span style="font-size:12px; color:var(--text-muted); overflow:hidden; white-space:nowrap; text-overflow:ellipsis; max-width:80%;">
+                    <b>${typeLabel}</b> (${label})
+                </span>
+                <button class="danger" style="padding:2px 6px; font-size:11px;" onclick="deleteMedia('${targetId}', ${idx})">Xóa</button>
+            </div>`;
+        });
+        html += '</div>';
+        return html;
+    }
+
+    function openMediaModal(targetId) {
+        document.getElementById('media-target-id').value = targetId;
+        document.getElementById('media-url-input').value = '';
+        document.getElementById('media-base64-input').value = '';
+        document.getElementById('media-file-picker').value = '';
+        document.getElementById('modal-add-media').style.display = 'block';
+    }
+
+    function closeMediaModal() {
+        document.getElementById('modal-add-media').style.display = 'none';
+    }
+
+    function handleMediaFileSelect(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = e => { document.getElementById('media-base64-input').value = e.target.result; };
+        reader.readAsDataURL(file);
+    }
+
+    function submitMedia() {
+        let targetId = document.getElementById('media-target-id').value;
+        let url = document.getElementById('media-url-input').value.trim();
+        let base64 = document.getElementById('media-base64-input').value.trim();
+        
+        if(!url && !base64) return alert("Vui lòng cung cấp URL hoặc mã Base64!");
+        
+        if(!workingQuizCopy.media) workingQuizCopy.media = {};
+        if(!workingQuizCopy.media[targetId]) workingQuizCopy.media[targetId] = [];
+        
+        workingQuizCopy.media[targetId].push({ url: url, base64: base64 });
+        closeMediaModal();
+        
+        // Lưu tạm RAM và render lại khu vực edit
+        saveCurrentEditDataToRAM();
+        renderEditQuestions();
+    }
+
+    function deleteMedia(targetId, index) {
+        if(confirm("Xóa phương tiện này?")) {
+            workingQuizCopy.media[targetId].splice(index, 1);
+            if(workingQuizCopy.media[targetId].length === 0) delete workingQuizCopy.media[targetId];
+            saveCurrentEditDataToRAM();
+            renderEditQuestions();
+        }
+    }
+    // ----------------------------------------
 
     function renderEditQuestions() {
         let qz = workingQuizCopy; 
@@ -583,23 +756,35 @@
                 </div>
                 
                 <label class="edit-label">${q.type === 'flashcard' ? 'Mặt trước (Nội dung):' : 'Nội dung câu hỏi:'}</label>
-                <textarea id="val-text-${q.id}">${q.text}</textarea>`;
+                <textarea id="val-text-${q.id}">${q.text}</textarea>
+                <button class="outline" style="padding:4px 8px; font-size:12px;" onclick="openMediaModal('${q.id}')">🖼️ Thêm Media (Cho câu hỏi)</button>
+                ${renderEditMediaPreview(q.id)}`;
                 
             if (q.type === 'mcq') {
                 html += `<label class="edit-label">Các đáp án & Chọn đáp án đúng:</label>`;
                 q.options.forEach((opt, oIdx) => {
                     let isChecked = q.correctIndex === oIdx ? 'checked' : '';
-                    html += `<div class="edit-row">
-                        <input type="radio" name="val-mcq-correct-${q.id}" value="${oIdx}" ${isChecked}>
-                        <textarea id="val-mcq-opt-${q.id}-${oIdx}" style="min-height:40px;">${opt}</textarea>
+                    let targetOptId = `${q.id}_opt_${oIdx}`;
+                    html += `<div class="edit-row" style="align-items:flex-start;">
+                        <input type="radio" name="val-mcq-correct-${q.id}" value="${oIdx}" style="margin-top:15px;" ${isChecked}>
+                        <div style="flex:1;">
+                            <textarea id="val-mcq-opt-${q.id}-${oIdx}" style="min-height:40px;">${opt}</textarea>
+                            <button class="outline" style="padding:2px 6px; font-size:11px;" onclick="openMediaModal('${targetOptId}')">+ Media (Đáp án này)</button>
+                            ${renderEditMediaPreview(targetOptId)}
+                        </div>
                     </div>`;
                 });
             } 
             else if (q.type === 'mtf') {
                 html += `<label class="edit-label">Các mệnh đề & Cài đặt Đúng/Sai:</label>`;
                 q.statements.forEach((stmt, sIdx) => {
+                    let targetStmtId = `${q.id}_stmt_${sIdx}`;
                     html += `<div style="margin-bottom: 10px; padding: 10px; border: 1px dashed var(--border); border-radius:6px;">
                         <textarea id="val-mtf-stmt-${q.id}-${sIdx}" style="min-height:40px; margin-bottom:5px;">${stmt}</textarea>
+                        <div style="margin-bottom:5px;">
+                            <button class="outline" style="padding:2px 6px; font-size:11px;" onclick="openMediaModal('${targetStmtId}')">+ Media (Mệnh đề này)</button>
+                            ${renderEditMediaPreview(targetStmtId)}
+                        </div>
                         <select id="val-mtf-ans-${q.id}-${sIdx}">
                             <option value="true" ${q.correctAnswers[sIdx] === true ? 'selected' : ''}>Đúng</option>
                             <option value="false" ${q.correctAnswers[sIdx] === false ? 'selected' : ''}>Sai</option>
@@ -609,12 +794,18 @@
                 });
             } 
             else if (q.type === 'sa') {
+                let targetAnsId = `${q.id}_ans`;
                 html += `<label class="edit-label">Đáp án đúng (chính xác):</label>
-                <input type="text" id="val-sa-ans-${q.id}" value="${q.correctAnswer}">`;
+                <input type="text" id="val-sa-ans-${q.id}" value="${q.correctAnswer}">
+                <button class="outline" style="padding:2px 6px; font-size:11px;" onclick="openMediaModal('${targetAnsId}')">+ Media (Kèm đáp án)</button>
+                ${renderEditMediaPreview(targetAnsId)}`;
             }
             else if (q.type === 'flashcard') {
+                let targetBackId = `${q.id}_back`;
                 html += `<label class="edit-label">Mặt sau (Giải thích / Đáp án):</label>
-                <textarea id="val-fc-back-${q.id}">${q.back || ''}</textarea>`;
+                <textarea id="val-fc-back-${q.id}">${q.back || ''}</textarea>
+                <button class="outline" style="padding:2px 6px; font-size:11px;" onclick="openMediaModal('${targetBackId}')">🖼️ Thêm Media (Mặt sau)</button>
+                ${renderEditMediaPreview(targetBackId)}`;
             }
 
             if (q.type !== 'mtf' && q.type !== 'flashcard') {
@@ -652,6 +843,8 @@
         event.stopPropagation();
         isSelectMode = true;
         document.getElementById('edit-bottom-bar').classList.remove('hidden');
+        document.getElementById('fab-wrapper').style.display = 'none'; 
+        
         document.querySelectorAll('.edit-chk').forEach(chk => chk.style.display = 'inline-block');
         let chkBox = document.querySelector(`.edit-chk[value="${qId}"]`);
         if(chkBox) chkBox.checked = true;
@@ -662,6 +855,8 @@
     function toggleSelectMode(status) {
         isSelectMode = status;
         document.getElementById('edit-bottom-bar').classList.toggle('hidden', !status);
+        document.getElementById('fab-wrapper').style.display = status ? 'none' : 'flex'; 
+        
         document.querySelectorAll('.edit-chk').forEach(chk => { chk.style.display = status ? 'inline-block' : 'none'; chk.checked = false; });
     }
 
@@ -674,7 +869,9 @@
         if(selectedIds.length === 0) { alert("Chưa có câu hỏi nào được chọn!"); return; }
         if(confirm(`Bạn sắp xóa ${selectedIds.length} câu hỏi. Chắc chắn chứ?`)) {
             workingQuizCopy.questions = workingQuizCopy.questions.filter(q => !selectedIds.includes(q.id));
-            saveCurrentEditDataToRAM(); renderEditQuestions(); toggleSelectMode(false);
+            saveCurrentEditDataToRAM(); 
+            renderEditQuestions(); 
+            toggleSelectMode(false);
         }
     }
 
@@ -705,39 +902,19 @@
     }
 
     function saveEditQuiz() {
-        saveCurrentEditDataToRAM(); quizzes[editQuizId] = workingQuizCopy; 
+        saveCurrentEditDataToRAM(); 
+        if(workingQuizCopy.media) {
+            for (let key in workingQuizCopy.media) {
+                if (!workingQuizCopy.media[key] || workingQuizCopy.media[key].length === 0) delete workingQuizCopy.media[key];
+            }
+        }
+        quizzes[editQuizId] = workingQuizCopy; 
         localStorage.setItem('quizzes', JSON.stringify(quizzes)); workingQuizCopy = null; 
         alert("Đã lưu thành công!"); renderHome();
     }
 
     function closeEditView() { 
         if(confirm("Hủy bỏ mọi thay đổi?")) { workingQuizCopy = null; renderHome(); }
-    }
-
-    function exportAssignHTML(event, id) {
-        event.stopPropagation();
-        let targetQuiz = quizzes[id];
-        let originalHTML = document.documentElement.outerHTML;
-        let injectScript = `
-        <script>
-            let rawQuiz = ${JSON.stringify(targetQuiz)};
-            quizzes = { [rawQuiz.id]: rawQuiz };
-            renderHome = function() {
-                document.getElementById('view-home').classList.add('hidden');
-                let hasProgress = localStorage.getItem('progress_' + rawQuiz.id) !== null;
-                handleQuizClick(rawQuiz.id, hasProgress);
-                let btnHomes = document.querySelectorAll('button[onclick="goHome()"], button[onclick="saveAndExit()"]');
-                btnHomes.forEach(b => b.style.display = 'none');
-            }
-            goHome = function() { location.reload(); }
-            saveAndExit = function() { alert("Vui lòng nộp bài để lưu kết quả."); }
-        </` + `script>`;
-        let assignHTML = originalHTML.replace('</body>', injectScript + '\n</body>');
-        let blob = new Blob([assignHTML], {type: "text/html;charset=utf-8"});
-        let a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = `BaiThi_${targetQuiz.id}.html`;
-        a.click();
     }
 
     /* --- LUỒNG LÀM BÀI --- */
@@ -753,6 +930,7 @@
         document.getElementById('modal-resume').style.display = 'none'; 
         document.getElementById('modal-global-settings').style.display = 'none';
         document.getElementById('modal-import-text').style.display = 'none';
+        closeMediaModal();
     }
 
     function executeResume(isResume) {
@@ -828,10 +1006,8 @@
         } else { window.scrollTo(0, 0); }
     }
 
-    // FIX LỖI TÁCH CHUỖI GÂY VỠ CODE
     function formatQuestionText(text) {
         if(!text) return '';
-        // Nếu có chứa thẻ code thì tuyệt đối KHÔNG tách chuỗi, nhường CSS lo hiển thị
         if(text.includes('<pre>') || text.includes('<code>')) {
             return text; 
         }
@@ -844,6 +1020,26 @@
             }
         }
         return text;
+    }
+
+    // HÀM HIỂN THỊ MEDIA LÚC LÀM BÀI
+    function buildQuizMediaHTML(targetId) {
+        let currentQz = quizzes[currentQuizId];
+        if(!currentQz.media || !currentQz.media[targetId] || currentQz.media[targetId].length === 0) return '';
+        
+        let html = `<div class="media-container">`;
+        currentQz.media[targetId].forEach(m => {
+            let src = m.base64 || m.url;
+            if(!src) return;
+            let isVid = (m.url && m.url.match(/\.(mp4|webm|ogg)$/i)) || (m.base64 && m.base64.includes('video/'));
+            let isAud = (m.url && m.url.match(/\.(mp3|wav|ogg)$/i)) || (m.base64 && m.base64.includes('audio/'));
+            
+            if (isVid) html += `<video controls><source src="${src}"></video>`;
+            else if (isAud) html += `<audio controls><source src="${src}"></audio>`;
+            else html += `<img src="${src}">`;
+        });
+        html += `</div>`;
+        return html;
     }
 
     function flipCard(qId) {
@@ -884,7 +1080,6 @@
 
             let html = `<div class="card review-item ${reviewClass}" id="block-${q.id}" data-qtype="${q.type}" data-search="${searchableText}">`;
             
-            // RENDERING FLASHCARD VỚI NHÃN NẰM BÊN TRONG
             if (q.type === 'flashcard') {
                 let isFlipped = userAnswers[q.id] ? 'is-flipped' : '';
                 html += `
@@ -893,18 +1088,21 @@
                         <div class="flashcard-face flashcard-front">
                             <div class="fc-label">Thẻ ${index + 1}</div>
                             <div class="fc-content">${formatQuestionText(q.text)}</div>
+                            ${buildQuizMediaHTML(q.id)}
                         </div>
                         <div class="flashcard-face flashcard-back">
                             <div class="fc-label">Thẻ ${index + 1} (Mặt sau)</div>
                             <div class="fc-content">${formatQuestionText(q.back)}</div>
+                            ${buildQuizMediaHTML(q.id + "_back")}
                         </div>
                     </div>
                 </div>
                 <div style="text-align:center; font-size:12px; color:var(--text-muted); margin-top:8px;">👆 Nhấn vào thẻ để lật</div>`;
             } 
-            // RENDERING CÂU HỎI THƯỜNG
             else {
                 html += `<div class="question-title"><strong>Câu ${index + 1}:</strong> ${formatQuestionText(q.text)}</div>`;
+                html += buildQuizMediaHTML(q.id); // Media của câu hỏi
+                
                 if (q.type === 'mcq') {
                     q.options.forEach((opt, idx) => {
                         let checked = userAnswers[q.id] === idx ? 'checked' : '';
@@ -914,8 +1112,11 @@
                             if (idx === q.correctIndex) labelClass = 'is-correct';
                             else if (userAnswers[q.id] === idx && idx !== q.correctIndex) labelClass = 'is-incorrect';
                         }
+                        
+                        let targetOptId = `${q.id}_opt_${idx}`;
                         html += `<label class="option-label ${labelClass}">
                             <input type="radio" name="q-${q.id}" value="${idx}" ${checked} ${disabled} onchange="handleInput('${q.id}', ${idx})"> ${opt}
+                            ${buildQuizMediaHTML(targetOptId)}
                         </label>`;
                     });
                 } 
@@ -934,8 +1135,11 @@
                             let expText = (q.explanations && q.explanations[sIdx]) ? q.explanations[sIdx] : "";
                             feedbackRow = `<div class="mtf-feedback ${rowClass}"><b>${isRowRight?"✔️":"❌"} Đáp án: ${correctStr}</b>${expText ? `<br><span style="color:var(--text-muted); font-size: 13px;">💡 <i>${expText}</i></span>` : ''}</div>`;
                         }
+                        
+                        let targetStmtId = `${q.id}_stmt_${sIdx}`;
                         html += `<div class="mtf-item">
                             <div class="mtf-text">${stmt}</div>
+                            ${buildQuizMediaHTML(targetStmtId)}
                             <div class="mtf-options">
                                 <label class="mtf-option-label"><input type="radio" name="mtf-${q.id}-${sIdx}" value="true" ${isT} ${disabled} onchange="handleInputMTF('${q.id}', ${sIdx}, true)"> Đúng</label>
                                 <label class="mtf-option-label"><input type="radio" name="mtf-${q.id}-${sIdx}" value="false" ${isF} ${disabled} onchange="handleInputMTF('${q.id}', ${sIdx}, false)"> Sai</label>
@@ -947,7 +1151,11 @@
                 else if (q.type === 'sa') {
                     let val = userAnswers[q.id] || '';
                     let disabled = (isReviewMode || checkedAnswers[q.id]) ? 'disabled' : '';
-                    html += `<input type="text" id="sa-${q.id}" value="${val}" ${disabled} oninput="handleInput('${q.id}', this.value)" placeholder="Nhập đáp án...">`;
+                    let targetAnsId = `${q.id}_ans`;
+                    html += `
+                        <input type="text" id="sa-${q.id}" value="${val}" ${disabled} oninput="handleInput('${q.id}', this.value)" placeholder="Nhập đáp án...">
+                        ${(isReviewMode || checkedAnswers[q.id]) ? buildQuizMediaHTML(targetAnsId) : ''}
+                    `;
                 }
 
                 if (settings.mode === 'instant' && !isReviewMode) {
@@ -1166,18 +1374,66 @@
     function shuffleArray(array) {
         for (let i = array.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [array[i], array[j]] =[array[j], array[i]]; }
     }
+    
+    // UPDATE LOGIC XÁO TRỘN ĐÁP ÁN: Phải xáo trộn kèm theo cả Media tương ứng
     function shuffleMCQOptions(q) {
-        let opts = q.options.map((opt, idx) => ({ text: opt, isCorrect: idx === q.correctIndex }));
+        let currentQz = quizzes[currentQuizId];
+        let opts = q.options.map((opt, idx) => {
+            let mediaKey = `${q.id}_opt_${idx}`;
+            return { 
+                originalId: idx,
+                text: opt, 
+                isCorrect: idx === q.correctIndex,
+                media: currentQz.media && currentQz.media[mediaKey] ? currentQz.media[mediaKey] : null
+            };
+        });
         shuffleArray(opts);
+        
         q.options = opts.map(o => o.text);
         q.correctIndex = opts.findIndex(o => o.isCorrect);
+        
+        // Cập nhật lại key media trong object gốc tạm thời (để render ra đúng chỗ)
+        if(currentQz.media) {
+            let tempMedia = {};
+            opts.forEach((o, newIdx) => {
+                if(o.media) tempMedia[`${q.id}_opt_${newIdx}`] = o.media;
+            });
+            // Giữ lại các media khác không bị xáo trộn
+            for(let key in currentQz.media) {
+                if(!key.startsWith(`${q.id}_opt_`)) tempMedia[key] = currentQz.media[key];
+            }
+            currentQz.media = tempMedia;
+        }
     }
+    
     function shuffleMTFOptions(q) {
+        let currentQz = quizzes[currentQuizId];
         let combined =[];
-        for (let i = 0; i < q.statements.length; i++) combined.push({ stmt: q.statements[i], ans: q.correctAnswers[i], exp: q.explanations ? q.explanations[i] : null });
+        for (let i = 0; i < q.statements.length; i++) {
+            let mediaKey = `${q.id}_stmt_${i}`;
+            combined.push({ 
+                stmt: q.statements[i], 
+                ans: q.correctAnswers[i], 
+                exp: q.explanations ? q.explanations[i] : null,
+                media: currentQz.media && currentQz.media[mediaKey] ? currentQz.media[mediaKey] : null
+            });
+        }
         shuffleArray(combined);
-        q.statements = combined.map(c => c.stmt); q.correctAnswers = combined.map(c => c.ans);
+        
+        q.statements = combined.map(c => c.stmt); 
+        q.correctAnswers = combined.map(c => c.ans);
         if (q.explanations) q.explanations = combined.map(c => c.exp);
+        
+        if(currentQz.media) {
+            let tempMedia = {};
+            combined.forEach((c, newIdx) => {
+                if(c.media) tempMedia[`${q.id}_stmt_${newIdx}`] = c.media;
+            });
+            for(let key in currentQz.media) {
+                if(!key.startsWith(`${q.id}_stmt_`)) tempMedia[key] = currentQz.media[key];
+            }
+            currentQz.media = tempMedia;
+        }
     }
 
     renderHome();
